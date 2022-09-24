@@ -17,31 +17,28 @@ class Car {
   }
 
   draw(context) {
+    context.save();
+    context.translate(this.x, this.y);
+    context.rotate(-this.angle);
+
     context.beginPath();
-    context.rect(
-      this.x - this.width / 2,
-      this.y - this.height / 2,
-      this.width,
-      this.height
-    );
+    context.rect(-this.width / 2, -this.height / 2, this.width, this.height);
+
     context.fill();
+    context.restore();
   }
 
   update() {
+    this.#move();
+  }
+
+  #move() {
     if (this.controls.forward) {
       this.speed += this.acceleration;
     }
 
     if (this.controls.backward) {
       this.speed -= this.acceleration;
-    }
-
-    if (this.controls.left) {
-      this.x -= 2;
-    }
-
-    if (this.controls.right) {
-      this.x += 2;
     }
 
     if (this.speed > this.maxSpeed) {
@@ -64,6 +61,18 @@ class Car {
       this.speed = 0;
     }
 
-    this.y -= this.speed;
+    if (this.speed != 0) {
+      let flip = this.speed > 0 ? 1 : -1;
+      if (this.controls.left) {
+        this.angle += 0.03 * flip;
+      }
+
+      if (this.controls.right) {
+        this.angle -= 0.03 * flip;
+      }
+    }
+
+    this.x -= Math.sin(this.angle) * this.speed;
+    this.y -= Math.cos(this.angle) * this.speed;
   }
 }

@@ -64,7 +64,7 @@ class Car {
     if (this.speed != 0) {
       let flip = this.speed > 0 ? 1 : -1;
       if (this.controls.left) {
-        this.angle += 0.03 * flip;
+        this.angle += 0.015 * flip;
       }
 
       if (this.controls.right) {
